@@ -1,0 +1,6 @@
+---
+
+dev_ssl_base_dir: /etc/dev-ssl
+dev_ssl_domains: [ '{{ ansible_fqdn }}' ]
+dev_ssl_base_domain: '{{ dev_ssl_domains[0] }}'
+dev_ssl_email: 'dev@example.com'
