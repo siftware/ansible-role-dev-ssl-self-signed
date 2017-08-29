@@ -7,13 +7,26 @@
     - '{{ dev_ssl_base_dir }}/certs'
     - '{{ dev_ssl_base_dir }}/private'
 
+- name: Create temp openssl config file
+  shell: cp /etc/ssl/openssl.cnf /tmp/dev-openssl.conf
+
+- name: Add additional options to temp openssl config file
+  blockinfile:
+    path: /tmp/dev-openssl.conf
+    block: |
+      [SAN]
+      subjectAltName=DNS:{{ dev_ssl_domains | join(",DNS:") }}
+
 - name: Create private key and self-signed certificate
-  shell: openssl req \
-            -newkey rsa:2048 \
-            -nodes
-            -keyout {{ dev_ssl_base_dir }}/private/{{ item }}.key \
-            -x509
-            -days 3650
-            -out {{ dev_ssl_base_dir }}/certs/{{ item }}.pem \
-            -subj '/C=XX/ST=Dev/L=The Internet/O=Acme Ltd/OU=Development/CN={{ item }}/emailAddress={{ dev_ssl_email }}'
-  with_items: '{{ dev_ssl_domains }}'
+  shell: |
+    openssl req \
+           -newkey rsa:2048 \
+           -nodes \
+           -x509 \
+           -days 3650 \
+           -config /tmp/dev-openssl.conf \
+           -subj "/C=XX/ST=Dev/L=The Internet/O=Acme Ltd/OU=Development/CN={{ dev_ssl_domains[0] }}/emailAddress={{ dev_ssl_email }}" \
+           -extensions SAN \
+           -keyout {{ dev_ssl_base_dir }}/private/{{ dev_ssl_domains[0] }}.key \
+           -out {{ dev_ssl_base_dir }}/certs/{{ dev_ssl_domains[0] }}.pem
+    exit 0
