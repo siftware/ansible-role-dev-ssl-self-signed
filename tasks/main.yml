@@ -1,5 +1,8 @@
 ---
 
+- name: Include OS-specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+
 - name: Create storage for dev-ssl
   file: path='{{ item }}' state=directory
   with_items:
@@ -8,7 +11,7 @@
     - '{{ dev_ssl_base_dir }}/private'
 
 - name: Create temp openssl config file
-  shell: cp /etc/ssl/openssl.cnf /tmp/dev-openssl.conf
+  shell: cp "{{ openssl_config_path }}" "/tmp/dev-openssl.conf"
 
 - name: Add additional options to temp openssl config file
   blockinfile:
