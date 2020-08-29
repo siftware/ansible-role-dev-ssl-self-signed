@@ -1,5 +1,5 @@
-PHP
-===
+Dev SSL Self Signed
+===================
 
 This Ansible role will create a self-signed SSL certificate.
 
@@ -15,17 +15,6 @@ dev_ssl_base_dir: /etc/dev-ssl
 dev_ssl_domains: [ '{{ ansible_fqdn }}' ]
 dev_ssl_base_domain: '{{ dev_ssl_domains[0] }}'
 dev_ssl_email: 'dev@example.com'
-```
-
-Example requirements.yml
-------------------------
-
-```yml
----
-
-- src: git+git@code.siftware.com:ansible/dev-ssl-self-signed.git
-  version: "1.0"
-  name: siftware.dev-ssl-self-signed
 ```
 
 Example Playbook
@@ -44,7 +33,7 @@ An example playbook of how to use the role.
 License
 -------
 
-MIT
+This work is licensed under CC BY-SA 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/4.0
 
 Author Information
 ------------------
